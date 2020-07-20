@@ -7,6 +7,47 @@ class GameBoard:
         self.HEIGHT = height
         self.BOARD_STATE = [[0] * width for _ in range(height)]
 
+    def _is_live_cell(self, row, col):
+        """
+        Checks whether the current cell is alive or dead.
+
+        1. Any live cell with 0 or 1 live neighbors becomes dead.
+        2. Any live cell with 2 or 3 live neighbors stays alive.
+        3. Any live cell with more than 3 live neighbors becomes dead.
+        4. Any live cell with exactly 3 live neighbors becomes alive.
+
+        Returns True is alive; False otherwise.
+        """
+        is_live = False
+        # 9 neighbours to check for each cell.
+        candidates = [
+                (row-1, col-1), (row-1, col), (row-1, col+1), # top
+                (row, col-1), (row, col+1),                 # mid
+                (row+1, col-1), (row+1, col), (row-1, col-1)  # bottom 
+        ]
+        live_neighbours_count = 0 
+        for candidate in candidates:
+            if not self._is_valid_cell(candidate):
+                continue
+            r, c = candidate[0], candidate[1]
+            if self.BOARD_STATE[r][c]:
+                live_neighbours_count += 1
+
+        if (self.BOARD_STATE[row][col] and 2 <= live_neighbours_count <= 3) or \
+            (not self.BOARD_STATE[row][col] and live_neighbours_count) == 3:
+            is_live = True
+        #print(self.BOARD_STATE[row][col], live_neighbours_count, is_live)
+        return is_live
+        
+    def _is_valid_cell(self, candidate):
+        row, col = candidate[0], candidate[1]
+        return (row >= 0 and row < self.HEIGHT) and \
+                (col >= 0 and col < self.WIDTH)
+    
+    def _get_random_cell_state(self):
+        return int(random() < 0.5)
+
+
     def dead_state(self, width=0, height=0):
         """ 
         Resets the board state with given width and height. If the width and
@@ -20,8 +61,19 @@ class GameBoard:
         self.BOARD_STATE = [[0] * width for _ in range(height)]
         return self.BOARD_STATE
 
-    def _get_random_cell_state(self):
-        return int(random() < 0.5)
+    def next_board_state(self):
+        """
+        Computes the next board state based on current.
+
+        Returns next board state.
+        """
+        for row in range(self.HEIGHT):
+            for col in range(self.WIDTH):
+                temp = 0
+                if self._is_live_cell(row, col):
+                    temp = 1
+                self.BOARD_STATE[row][col] = temp
+        return self.BOARD_STATE
 
     def random_state(self):
         """
@@ -42,7 +94,7 @@ class GameBoard:
         """
         top_bottom = '+' + '-' * self.WIDTH + '+' + '\n'
         mid = []
-        trans_table = {'0': ' ', '1': '#'}
+        trans_table = str.maketrans('01', ' #')
         for row in range(self.HEIGHT):
             current_row = self.BOARD_STATE[row]
             current_row = ''.join(map(lambda x: str(x), current_row))
@@ -53,12 +105,14 @@ class GameBoard:
 
 def main():
     """ for unittesting! """
-    width = 25
-    height = 25
+    width = 10
+    height = 10
     testBoard = GameBoard(width, height)
-    print(testBoard.render_board())
     testBoard.random_state()
     print(testBoard.render_board())
+    testBoard.next_board_state()
+    print(testBoard.render_board())
+
 
 if __name__ == '__main__':
     main()
