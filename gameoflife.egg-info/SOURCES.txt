@@ -1,0 +1,8 @@
+README.md
+setup.py
+gameoflife/__init__.py
+gameoflife/game_of_life.py
+gameoflife.egg-info/PKG-INFO
+gameoflife.egg-info/SOURCES.txt
+gameoflife.egg-info/dependency_links.txt
+gameoflife.egg-info/top_level.txt

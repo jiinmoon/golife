@@ -21,7 +21,14 @@ within the programming community - for it is facinating to observe how little de
 This project is a self-interest driven study project focused on creating the
 simulation environment for _Game of Life_ in Python3. 
 
+TODO
+----
 
+- Write more robust testing; need to test following functions:
+    - `render_board()`
+    - `next_board_state()`
+- Use basic test cases (i.e. WIDTH=3, HEIGHT=3).
+- Give project a better structure.
 
 
 Contacts
