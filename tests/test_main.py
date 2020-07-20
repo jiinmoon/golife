@@ -8,7 +8,7 @@ def test_board():
     # setup
     yield GameBoard()
     # teardown
-    print('Good Bye')
+    #print('Good Bye')
 
 class Test_Game:
     def test_GameBoard_creation_null(self, test_board):
@@ -56,6 +56,78 @@ class Test_Game:
             [0, 0, 0],
             [0, 0, 0],
         ]
-        width = 3
-        height = 3
-        pass 
+        test_board.set_board(initial_state)
+        return_next_state = test_board.next_board_state()
+        assert return_next_state == expected_next_state
+
+    def test_GameBoard_next_state_1(self, test_board):
+        # dead cell with 3 neighbour should become alive.
+        initial_state = [
+            [0, 0, 1],
+            [0, 1, 1],
+            [0, 0, 0],
+        ]
+        expected_next_state = [
+            [0, 1, 1],
+            [0, 1, 1],
+            [0, 0, 0],
+        ]
+        test_board.set_board(initial_state)
+        return_next_state = test_board.next_board_state()
+        assert return_next_state == expected_next_state
+ 
+    def test_GameBoard_next_state_2(self, test_board):
+        # live cell with 0 or 1 neighbour should become alive.
+        initial_state = [
+            [1, 0, 1],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+        expected_next_state = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+        test_board.set_board(initial_state)
+        return_next_state = test_board.next_board_state()
+        assert return_next_state == expected_next_state
+
+    def test_GameBoard_next_state_3(self, test_board):
+        # live cell with more than 3 neighbour should die.
+        initial_state = [
+            [1, 1, 1],
+            [0, 1, 1],
+            [0, 0, 0],
+        ]
+        expected_next_state = [
+            [1, 0, 1],
+            [1, 0, 1],
+            [0, 0, 0],
+        ]
+        test_board.set_board(initial_state)
+        return_next_state = test_board.next_board_state()
+        assert return_next_state == expected_next_state
+
+    def test_GameBoard_next_next_state_1(self, test_board):
+        initial_state = [
+            [1, 1, 1],
+            [0, 1, 1],
+            [0, 0, 0],
+        ]
+        expected_next_state = [
+            [1, 0, 1],
+            [1, 0, 1],
+            [0, 0, 0],
+        ]
+        expected_next_next_state = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+        test_board.set_board(initial_state)
+        return_next_state = test_board.next_board_state()
+        return_next_next_state = test_board.next_board_state()
+        #print(return_next_state)
+        #print(return_next_next_state)
+        assert return_next_state == expected_next_state
+        assert return_next_next_state == expected_next_next_state

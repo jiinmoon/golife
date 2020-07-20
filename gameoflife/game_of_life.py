@@ -23,7 +23,7 @@ class GameBoard:
         candidates = [
                 (row-1, col-1), (row-1, col), (row-1, col+1), # top
                 (row, col-1), (row, col+1),                 # mid
-                (row+1, col-1), (row+1, col), (row-1, col-1)  # bottom 
+                (row+1, col-1), (row+1, col), (row+1, col+1)  # bottom 
         ]
         live_neighbours_count = 0 
         for candidate in candidates:
@@ -67,12 +67,14 @@ class GameBoard:
 
         Returns next board state.
         """
+        temp_board = [[0] * self.WIDTH for _ in range(self.HEIGHT)]
         for row in range(self.HEIGHT):
             for col in range(self.WIDTH):
-                temp = 0
+                temp_state = 0
                 if self._is_live_cell(row, col):
-                    temp = 1
-                self.BOARD_STATE[row][col] = temp
+                    temp_state = 1
+                temp_board[row][col] = temp_state
+        self.BOARD_STATE = temp_board
         return self.BOARD_STATE
 
     def random_state(self):

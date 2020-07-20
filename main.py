@@ -6,8 +6,8 @@ from random import random
 
 def main():
     """ for unittesting purposes only! """
-    width = 10
-    height = 10
+    width = 3
+    height = 3
     testBoard = GameBoard(width, height)
     testBoard.random_state()
     print(testBoard.render_board())
