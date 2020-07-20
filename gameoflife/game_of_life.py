@@ -103,6 +103,18 @@ class GameBoard:
             mid.append(current_row)
         return top_bottom + ''.join(mid) + top_bottom
 
+    def set_board(self, board):
+        """
+        Given a pre-initialized board, set the current board state to match.
+
+        Return new board state matching the given board.
+        """
+        self.HEIGHT = len(board)
+        self.WIDTH = len(board[0])
+        self.BOARD_STATE = board
+        return self.BOARD_STATE
+
+
 def main():
     """ for unittesting! """
     width = 10

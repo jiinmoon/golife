@@ -1,27 +1,61 @@
-""" unittests """
+""" testing suite """
 from gameoflife.game_of_life import GameBoard
 
-def test_GameBoard_creation():
-    # test whether board object exist.
-    TestBoard = GameBoard()
-    assert TestBoard and \
-            TestBoard.WIDTH == 0 and \
-            TestBoard.HEIGHT == 0
+import pytest
 
-    # test for correct height and width.
-    width = 5
-    height = 5
-    TestBoard = GameBoard(width, height)
-    assert TestBoard.WIDTH == width and \
-            TestBoard.HEIGHT == height
-    assert TestBoard.BOARD_STATE == [[0] * width for _ in range(height)]
+@pytest.fixture()
+def test_board():
+    # setup
+    yield GameBoard()
+    # teardown
+    print('Good Bye')
 
-    # new values for dead_state() test
-    width = 4
-    height = 4
-    return_board_state = TestBoard.dead_state(width, height)
-    assert TestBoard.WIDTH == width and \
-            TestBoard.WIDTH == height
-    assert return_board_state and \
-            return_board_state == [[0] * width for _ in range(height)]
+class Test_Game:
+    def test_GameBoard_creation_null(self, test_board):
+        # test whether board object exist.
+        assert test_board and \
+                test_board.WIDTH == 0 and \
+                test_board.HEIGHT == 0
 
+    def test_GameBoard_creation_init(self):
+        # test for correct height and width in new board.
+        width = 5
+        height = 5
+        test_board = GameBoard(width, height)
+        assert test_board.WIDTH == width and \
+                test_board.HEIGHT == height
+        assert test_board.BOARD_STATE == [[0] * width for _ in range(height)]
+
+    def test_GameBoard_dead_state(self, test_board):
+        # new values for dead_state() test
+        width = 5
+        height = 5
+        return_board_state = test_board.dead_state(width, height)
+        assert test_board.WIDTH == width and \
+                test_board.WIDTH == height
+        assert return_board_state and \
+                return_board_state == [[0] * width for _ in range(height)]
+
+    def test_GameBoard_set_state(self, test_board):
+        initial_state = [
+            [0, 0, 0],
+            [0, 1, 0],
+            [0, 0, 0],
+        ]
+        return_board_state = test_board.set_board(initial_state)
+        assert return_board_state == initial_state
+
+    def test_GameBoard_next_state_1(self, test_board):
+        initial_state = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+        expected_next_state = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+        width = 3
+        height = 3
+        pass 
