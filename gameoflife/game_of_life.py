@@ -99,12 +99,29 @@ class GameBoard:
         trans_table = str.maketrans('01', ' #')
         for row in range(self.HEIGHT):
             current_row = self.BOARD_STATE[row]
-            current_row = ''.join(map(lambda x: str(x), current_row))
+            current_row = ''.join(map(str, current_row))
             current_row = current_row.translate(trans_table)
             current_row = '|' + current_row + '|' + '\n'
             mid.append(current_row)
         return top_bottom + ''.join(mid) + top_bottom
 
+    def render_board_for_terminal(self):
+        """
+        Renders the current board state for terminal output.
+        Similar to the render_board() but without newline chars.
+        """
+        top_bottom = '+' + '-' * self.WIDTH + '+'
+        result = [top_bottom]
+        trans_table = str.maketrans('01', ' #')
+        for row in range(self.HEIGHT):
+            current_row = self.BOARD_STATE[row]
+            current_row = ''.join(map(str, current_row))
+            current_row = current_row.translate(trans_table)
+            current_row = '|' + current_row + '|'
+            result.append(current_row)
+        result.append(top_bottom)
+        return result
+        
     def set_board(self, board):
         """
         Given a pre-initialized board, set the current board state to match.
