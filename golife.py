@@ -74,8 +74,8 @@ def evaluate_running_mode(args):
 def run_in_random_mode(args):
     """ continuously run in random mode """
     stdScr = Screen()
-    width = 10
-    height = 10
+    width = 20
+    height = 20
     if args.width and (1 <= args.width < stdScr.x):
         width = args.width
     if args.height and (1 <= args.height < stdScr.y):
