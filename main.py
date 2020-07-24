@@ -29,7 +29,5 @@ def main():
             curse.nocbreak()
             curse.endwin()
         
-
-
 if __name__ == '__main__':
     main()
