@@ -13,6 +13,7 @@ from time import sleep
 
 import argparse
 import curses
+import json
 
 class Screen():
     def __init__(self):
@@ -53,7 +54,7 @@ def create_parser():
             help="specify the height of the board"
     )
     parser.add_argument(
-            "--in",
+            "--path",
             help="specify the path of template file"
     )
     parser.add_argument(
@@ -74,14 +75,23 @@ def evaluate_running_mode(args):
 def run_in_random_mode(args):
     """ continuously run in random mode """
     stdScr = Screen()
-    width = 20
-    height = 20
+    width = 5
+    height = 5
     if args.width and (1 <= args.width < stdScr.x):
         width = args.width
     if args.height and (1 <= args.height < stdScr.y):
         height = args.height
     testBoard = GameBoard(width, height)
     testBoard.random_state()
+    display_to_terminal(stdScr, testBoard)
+
+def is_valid_template_board(board, max_height, max_width):
+    template_height = len(board)
+    template_width = len(board[0])
+    return (1 <= template_height < max_height) and \
+            (1 <= template_width < max_width)
+
+def display_to_terminal(stdScr, testBoard):
     while True:
         testBoard.next_board_state()
         msg = testBoard.render_board()
@@ -90,6 +100,33 @@ def run_in_random_mode(args):
             sleep(0.5)
         finally:
             stdScr.clean_up()
+
+def run_in_template_mode(args):
+    """ continuously run with the given template board. """
+    stdScr = Screen()
+    template_board = None
+    if not args.path:
+        print("Path to a template is required. Refer to usage.")
+        stdScr.clean_up()
+        exit()
+
+    with open(args.path, 'r') as f:
+        template_json = json.load(f)
+        template_board = template_json["template"]
+    
+    if not is_valid_template_board(template_board, stdScr.x, stdScr.y):
+        print("invalid template format or " + \
+                "template exceeds height/width limit.")
+        stdScr.clean_up()
+        exit()
+
+    testBoard = GameBoard()
+    testBoard.set_board(template_board)
+    display_to_terminal(stdScr, testBoard) 
+
+def run_in_gif_mode(args):
+    """ export outputin .gif for specified duration. """
+    pass
 
 def main():
     parser = create_parser()
