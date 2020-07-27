@@ -97,28 +97,29 @@ def display_to_terminal(stdScr, testBoard):
         msg = testBoard.render_board()
         try:
             stdScr.display(msg)
-            sleep(0.5)
+            sleep(0.1)
         finally:
             stdScr.clean_up()
 
+def exit_handler(stdScr, msg):
+    print(msg)
+    if stdScr != None:
+        stdScr.clean_up()
+    exit(1)
+
 def run_in_template_mode(args):
     """ continuously run with the given template board. """
-    stdScr = Screen()
     template_board = None
-    if not args.path:
-        print("Path to a template is required. Refer to usage.")
-        stdScr.clean_up()
-        exit()
 
     with open(args.path, 'r') as f:
         template_json = json.load(f)
         template_board = template_json["template"]
-    
+
+    stdScr = Screen()
     if not is_valid_template_board(template_board, stdScr.x, stdScr.y):
-        print("invalid template format or " + \
+        exit_handler(stdScr,
+                "invalid template format or " + \
                 "template exceeds height/width limit.")
-        stdScr.clean_up()
-        exit()
 
     testBoard = GameBoard()
     testBoard.set_board(template_board)
