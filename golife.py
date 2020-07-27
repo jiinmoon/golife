@@ -15,6 +15,8 @@ import argparse
 import curses
 import json
 
+DEFAULT_DISPLAY_DELAY = 0.1 # in seconds
+
 class Screen():
     def __init__(self):
         self.screen = curses.initscr()
@@ -97,7 +99,7 @@ def display_to_terminal(stdScr, testBoard):
         msg = testBoard.render_board()
         try:
             stdScr.display(msg)
-            sleep(0.1)
+            sleep(DEFAULT_DISPLAY_DELAY)
         finally:
             stdScr.clean_up()
 
