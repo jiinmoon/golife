@@ -3,7 +3,7 @@ attrs==19.3.0
 -e /home/jmoon/Devel/gameoflife
 more-itertools==8.4.0
 packaging==20.4
-Pillow==7.2.0
+Pillow==10.0.1
 pluggy==0.13.1
 py==1.9.0
 pyparsing==2.4.7
